@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/seqgenerator.iml" filepath="$PROJECT_DIR$/.idea/modules/seqgenerator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/seqgenerator_main.iml" filepath="$PROJECT_DIR$/.idea/modules/seqgenerator_main.iml" group="seqgenerator" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/seqgenerator_test.iml" filepath="$PROJECT_DIR$/.idea/modules/seqgenerator_test.iml" group="seqgenerator" />
+    </modules>
+  </component>
+</project>
