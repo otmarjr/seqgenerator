@@ -2,20 +2,20 @@ import com.google.common.collect.Lists;
 
 import java.util.*;
 
-/**
- * Created by 07257618658 on 02/02/17.
- */
 
 public class CombinationIterator<T>
         implements
         Iterator<List<T>> {
     private List<T> items;
     private int choose;
-    private boolean started;
     private boolean finished;
     private int[] current;
 
     public CombinationIterator(Collection<T> items, int choose) {
+       this(items,choose,null);
+    }
+
+    public CombinationIterator(Collection<T> items, int choose, int[] currentCombinationIndices) {
         if (items == null) {
             throw new IllegalArgumentException("items");
         }
@@ -25,6 +25,30 @@ public class CombinationIterator<T>
         this.items = Lists.newArrayList(items);
         this.choose = choose;
         this.finished = false;
+
+        if (currentCombinationIndices == null) {
+            current = new int[choose];
+            for (int i = 0; i < choose; i++) {
+                current[i] = i;
+            }
+        }
+        else {
+            if (currentCombinationIndices.length != choose){
+                throw new IllegalArgumentException("Current combination must have the same length of choose variable.");
+            }
+
+            for (int i=0;i<choose;i++){
+                if (currentCombinationIndices[i] < 0 || currentCombinationIndices[i] >= choose){
+                    throw new IllegalArgumentException("Current combination have an illegal value at position " + i + ".");
+                }
+            }
+            this.current = currentCombinationIndices;
+        }
+    }
+
+
+    public int[] getCurrentIndices(){
+        return Arrays.copyOf(current, current.length);
     }
 
     public boolean hasNext() {
@@ -35,14 +59,6 @@ public class CombinationIterator<T>
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
-
-        if (current == null) {
-            current = new int[choose];
-            for (int i = 0; i < choose; i++) {
-                current[i] = i;
-            }
-        }
-
         List<T> result = new ArrayList<T>(choose);
         for (int i = 0; i < choose; i++) {
             result.add(items.get(current[i]));

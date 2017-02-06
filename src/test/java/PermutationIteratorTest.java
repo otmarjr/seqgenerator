@@ -2,9 +2,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by otmar on 05/02/2017.
- */
+
 public class PermutationIteratorTest {
     @Test
     public void hasNext() throws Exception {

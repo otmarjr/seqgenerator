@@ -1,8 +1,6 @@
 import java.util.*;
 
-/**
- * Created by 07257618658 on 03/02/17.
- */
+
 public class PermutationIterator<T>
         implements Iterator<List<T>> {
 
@@ -18,7 +16,6 @@ public class PermutationIterator<T>
         }
 
         if (allElements.isEmpty()) {
-            nextPermutation = null;
             return;
         }
 
@@ -64,7 +61,7 @@ public class PermutationIterator<T>
         return ret;
     }
 
-    public int[] getIndices() {
+    public int[] getCurrentIndices() {
         return Arrays.copyOf(indices, indices.length);
     }
 
@@ -127,4 +124,7 @@ public class PermutationIterator<T>
         array[b] = tmp;
     }
 
+    public int getTotalSteps() {
+        return totalSteps;
+    }
 }

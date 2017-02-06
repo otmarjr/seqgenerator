@@ -8,9 +8,7 @@ import org.junit.rules.ExpectedException;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Created by otmar on 05/02/2017.
- */
+
 public class SequenceGeneratorTest {
     @Rule
     public ExpectedException expectedForEmptySets = ExpectedException.none();

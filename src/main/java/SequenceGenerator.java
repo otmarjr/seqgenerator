@@ -1,14 +1,15 @@
+import javafx.collections.transformation.SortedList;
+
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-/**
- * Created by otmar on 04/02/2017.
- */
+
 public class SequenceGenerator<T> implements Iterator<List<T>> {
     long totalSequences;
-    int sequenceSize;
+    int sequenceLength;
     int maximumLength;
     Collection<T> elements;
     List<T> elementsToPermute;
@@ -30,14 +31,14 @@ public class SequenceGenerator<T> implements Iterator<List<T>> {
         }
 
         this.totalSequences = 0;
-        this.sequenceSize = 1;
+        this.sequenceLength = 1;
         this.maximumLength = maximumSequenceLength;
         this.elements = elements;
     }
 
     @Override
     public boolean hasNext() {
-        if (sequenceSize < maximumLength){
+        if (sequenceLength < maximumLength){
             return true;
         }
         else {
@@ -64,7 +65,7 @@ public class SequenceGenerator<T> implements Iterator<List<T>> {
         }
 
         if (combinationsGenerator == null){
-            combinationsGenerator = new CombinationIterator<>(elements, sequenceSize);
+            combinationsGenerator = new CombinationIterator<>(elements, sequenceLength);
             elementsToPermute = combinationsGenerator.next();
         }
 
@@ -75,8 +76,8 @@ public class SequenceGenerator<T> implements Iterator<List<T>> {
 
         if (!permutationGenerator.hasNext()){
             if (!combinationsGenerator.hasNext()) {
-                sequenceSize++;
-                combinationsGenerator = new CombinationIterator<T>(elements, sequenceSize);
+                sequenceLength++;
+                combinationsGenerator = new CombinationIterator<T>(elements, sequenceLength);
             }
             elementsToPermute = combinationsGenerator.next();
             permutationGenerator = new PermutationIterator<>(elementsToPermute);
@@ -87,5 +88,56 @@ public class SequenceGenerator<T> implements Iterator<List<T>> {
         List<T> next = permutationGenerator.next();
 
         return next;
+    }
+
+    class SequenceIndex implements Serializable{
+        private static final long serialVersionUID = 2496849987065726718L;
+
+        private int[] currentCombinationIndices;
+        private int[] currentPermutationIndices;
+        private int sequenceLength;
+
+        public SequenceIndex(int sequenceLength, int[] combinationIndices, int[] permutationIndices){
+            this.currentCombinationIndices = combinationIndices;
+            this.currentPermutationIndices = permutationIndices;
+            this.sequenceLength = sequenceLength;
+        }
+
+        public int[] getCurrentCombinationIndices() {
+            return currentCombinationIndices;
+        }
+
+        public void setCurrentCombinationIndices(int[] currentCombinationIndices) {
+            this.currentCombinationIndices = currentCombinationIndices;
+        }
+
+        public int[] getCurrentPermutationIndices() {
+            return currentPermutationIndices;
+        }
+
+        public void setCurrentPermutationIndices(int[] currentPermutationIndices) {
+            this.currentPermutationIndices = currentPermutationIndices;
+        }
+
+        public int getSequenceLength() {
+            return sequenceLength;
+        }
+
+        public void setSequenceLength(int sequenceLength) {
+            this.sequenceLength = sequenceLength;
+        }
+    }
+
+    public SequenceIndex getCurrentIndex(){
+        return new SequenceIndex(this.sequenceLength, this.combinationsGenerator.getCurrentIndices(), this.permutationGenerator.getCurrentIndices());
+    }
+
+    public void setCurrentIndex(SequenceIndex index){
+        if (index == null || index.getCurrentCombinationIndices() == null || index.getCurrentPermutationIndices() == null){
+            throw new IllegalArgumentException("Index and its members cannot be null.");
+        }
+
+        combinationsGenerator = new CombinationIterator<>(elements, sequenceLength, index.getCurrentCombinationIndices());
+        permutationGenerator = new PermutationIterator<> (elements, index.getCurrentPermutationIndices(),null);
     }
 }
