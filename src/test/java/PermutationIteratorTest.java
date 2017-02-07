@@ -108,4 +108,31 @@ public class PermutationIteratorTest {
         Assert.assertArrayEquals(new int[]{1,0,2}, indicesAfter3Permutations);
 
     }
+
+    @Test
+    public void testPermutationResumeViaConstructorWithCurrentIndices() throws Exception {
+        PermutationIterator<String> sgen = new PermutationIterator<>(Lists.newArrayList("A", "B", "C"));
+        Set<List<String>> firstPermutations = Sets.newHashSet();
+
+        firstPermutations.add(sgen.next());
+        firstPermutations.add(sgen.next());
+
+        int[] indicesAfterTwoPermutations = sgen.getCurrentIndices();
+
+        PermutationIterator<String> newGenerator = new PermutationIterator<>(Lists.newArrayList("A", "B", "C"), indicesAfterTwoPermutations);
+        Set<List<String>> remainingPermutations = Sets.newHashSet();
+
+        while (newGenerator.hasNext()){
+            remainingPermutations.add(newGenerator.next());
+        }
+
+        Set<List<String>> allPermutations = Sets.union(firstPermutations, remainingPermutations);
+        Set<List<String>> expectedPermutations = Sets.newHashSet(Lists.newArrayList("A", "B", "C"),Lists.newArrayList("A", "C", "B")
+        , Lists.newArrayList("B", "C", "A"), Lists.newArrayList("B", "A", "C"), Lists.newArrayList("C", "B", "A"), Lists.newArrayList("C", "A", "B"));
+
+        Assert.assertEquals(2,firstPermutations.size());
+        Assert.assertEquals(4, remainingPermutations.size());
+        Assert.assertEquals(6, allPermutations.size());
+        Assert.assertEquals(expectedPermutations, allPermutations);
+    }
 }

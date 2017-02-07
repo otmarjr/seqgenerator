@@ -4,6 +4,10 @@ import static org.junit.Assert.*;
 
 
 public class CombinationIteratorTest {
+    @Test
+    public void getCurrentIndices() throws Exception {
+
+    }
 
     @Test
     public void hasNext() throws Exception {
@@ -19,5 +23,6 @@ public class CombinationIteratorTest {
     public void remove() throws Exception {
 
     }
+
 
 }

@@ -47,7 +47,7 @@ public class PermutationIterator<T>
         }
 
         if (totalSteps == 0){
-            nextPermutation = new ArrayList<T>(allElements);
+            loadPermutation();
         }
         else{
             generateNextPermutation();
