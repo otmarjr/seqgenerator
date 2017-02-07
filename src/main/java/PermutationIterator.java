@@ -1,3 +1,5 @@
+import com.google.common.collect.Lists;
+
 import java.util.*;
 
 
@@ -35,7 +37,7 @@ public class PermutationIterator<T>
 
     @Override
     public boolean hasNext() {
-        return getNextIndexToPermute() >= 0;
+        return totalSteps == 0 || getNextIndexToPermute() >= 0;
     }
 
     @Override
@@ -44,18 +46,18 @@ public class PermutationIterator<T>
             throw new NoSuchElementException("No permutations left.");
         }
 
+        if (totalSteps == 0){
+            nextPermutation = new ArrayList<T>(allElements);
+        }
+        else{
+            generateNextPermutation();
+        }
         totalSteps++;
-        List<T> ret = nextPermutation;
-        generateNextPermutation();
-        return ret;
+        return nextPermutation;
     }
 
     public int[] getCurrentIndices() {
         return Arrays.copyOf(indices, indices.length);
-    }
-
-    public List<T> getNextPermutation() {
-        return nextPermutation;
     }
 
     private void generateNextPermutation() {
