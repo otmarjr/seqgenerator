@@ -138,6 +138,6 @@ public class SequenceGenerator<T> implements Iterator<List<T>> {
         }
 
         combinationsGenerator = new CombinationIterator<>(elements, sequenceLength, index.getCurrentCombinationIndices());
-        permutationGenerator = new PermutationIterator<> (elements, index.getCurrentPermutationIndices(),null);
+        permutationGenerator = new PermutationIterator<> (elements, index.getCurrentPermutationIndices());
     }
 }

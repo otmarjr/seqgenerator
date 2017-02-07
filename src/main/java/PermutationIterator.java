@@ -9,11 +9,7 @@ public class PermutationIterator<T>
     private int[] indices;
     private int totalSteps = 0;
 
-    PermutationIterator(Collection<T> allElements, int[] indices, List<T> nextPermutation) {
-
-        if (indices == null && nextPermutation != null || indices != null && nextPermutation == null) {
-            throw new IllegalArgumentException("Both indices and nextPermutation must be non-null.");
-        }
+    PermutationIterator(Collection<T> allElements, int[] currentPermutationIndices) {
 
         if (allElements.isEmpty()) {
             return;
@@ -21,37 +17,30 @@ public class PermutationIterator<T>
 
         this.allElements.addAll(allElements);
 
-        if (indices == null) {
+        if (currentPermutationIndices == null) {
             this.indices = new int[allElements.size()];
 
             for (int i = 0; i < this.indices.length; ++i) {
                 this.indices[i] = i;
             }
         } else {
-            this.indices = indices;
+            this.indices = currentPermutationIndices;
         }
-
-        if (nextPermutation == null) {
-            this.nextPermutation = new ArrayList<>(this.allElements);
-        } else {
-            this.nextPermutation = nextPermutation;
-        }
-
 
     }
 
     PermutationIterator(List<T> allElements) {
-        this(allElements, null, null);
+        this(allElements, null);
     }
 
     @Override
     public boolean hasNext() {
-        return nextPermutation != null;
+        return getNextIndexToPermute() >= 0;
     }
 
     @Override
     public List<T> next() {
-        if (nextPermutation == null) {
+        if (!hasNext()) {
             throw new NoSuchElementException("No permutations left.");
         }
 
@@ -70,11 +59,7 @@ public class PermutationIterator<T>
     }
 
     private void generateNextPermutation() {
-        int i = indices.length - 2;
-
-        while (i >= 0 && indices[i] > indices[i + 1]) {
-            --i;
-        }
+        int i = getNextIndexToPermute();
 
         if (i == -1) {
             // No more new permutations.
@@ -105,6 +90,15 @@ public class PermutationIterator<T>
         }
 
         loadPermutation();
+    }
+
+    private int getNextIndexToPermute() {
+        int i = indices.length - 2;
+
+        while (i >= 0 && indices[i] > indices[i + 1]) {
+            --i;
+        }
+        return i;
     }
 
     private void loadPermutation() {
