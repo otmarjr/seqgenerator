@@ -37,7 +37,10 @@ public class PermutationIteratorTest {
 
         for (int i =0;i<numberOfPermutations;i++){
             Assert.assertTrue("Should return true after " + (i+1) + " permutations.", sgen.hasNext());
+            sgen.next();
         }
+
+        Assert.assertFalse(sgen.hasNext());
     }
 
     @Test
@@ -110,7 +113,23 @@ public class PermutationIteratorTest {
     }
 
     @Test
-    public void testPermutationResumeViaConstructorWithCurrentIndices() throws Exception {
+    public void testPermutationsGeneration() throws Exception {
+        PermutationIterator<String> sgen = new PermutationIterator<>(Lists.newArrayList("A", "B", "C"));
+        Set<List<String>> actualPermutations = Sets.newHashSet();
+
+        while (sgen.hasNext()){
+            actualPermutations.add(sgen.next());
+        }
+
+        Set<List<String>> expectedPermutations = Sets.newHashSet(Lists.newArrayList("A", "B", "C"),Lists.newArrayList("A", "C", "B")
+                , Lists.newArrayList("B", "C", "A"), Lists.newArrayList("B", "A", "C"), Lists.newArrayList("C", "B", "A"), Lists.newArrayList("C", "A", "B"));
+
+        Assert.assertEquals(expectedPermutations, actualPermutations);
+        Assert.assertEquals(expectedPermutations.size(), sgen.getTotalSteps());
+    }
+
+    @Test
+    public void testResumePermutationGenerationViaConstructorWithCurrentIndices() throws Exception {
         PermutationIterator<String> sgen = new PermutationIterator<>(Lists.newArrayList("A", "B", "C"));
         Set<List<String>> firstPermutations = Sets.newHashSet();
 

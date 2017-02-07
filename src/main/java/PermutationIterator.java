@@ -10,6 +10,7 @@ public class PermutationIterator<T>
     private final List<T> allElements = new ArrayList<>();
     private int[] indices;
     private int totalSteps = 0;
+    private boolean shouldUseInitialIndicesAsAPermutation;
 
     PermutationIterator(Collection<T> allElements, int[] currentPermutationIndices) {
 
@@ -20,12 +21,14 @@ public class PermutationIterator<T>
         this.allElements.addAll(allElements);
 
         if (currentPermutationIndices == null) {
+            shouldUseInitialIndicesAsAPermutation = true;
             this.indices = new int[allElements.size()];
 
             for (int i = 0; i < this.indices.length; ++i) {
                 this.indices[i] = i;
             }
         } else {
+            shouldUseInitialIndicesAsAPermutation = false;
             this.indices = currentPermutationIndices;
         }
 
@@ -37,7 +40,12 @@ public class PermutationIterator<T>
 
     @Override
     public boolean hasNext() {
-        return totalSteps == 0 || getNextIndexToPermute() >= 0;
+        if (shouldUseInitialIndicesAsAPermutation){
+            return totalSteps == 0 || getNextIndexToPermute() >= 0;
+        }
+        else {
+            return getNextIndexToPermute() >= 0;
+        }
     }
 
     @Override
@@ -46,7 +54,7 @@ public class PermutationIterator<T>
             throw new NoSuchElementException("No permutations left.");
         }
 
-        if (totalSteps == 0){
+        if (totalSteps == 0 && shouldUseInitialIndicesAsAPermutation){
             loadPermutation();
         }
         else{
