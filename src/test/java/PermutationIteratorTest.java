@@ -2,6 +2,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.math.BigIntegerMath;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.Set;
 
 
 public class PermutationIteratorTest {
+    @Rule
     public ExpectedException expectedForInvalidLists = ExpectedException.none();
 
 

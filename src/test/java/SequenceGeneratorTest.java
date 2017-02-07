@@ -44,6 +44,7 @@ public class SequenceGeneratorTest {
         int numberOfArrangements = nFactorial/nMinusMFactorial;
         return numberOfArrangements;
     }
+
     @Test
     public void hasNextForLargerSet() throws Exception {
 
@@ -80,5 +81,4 @@ public class SequenceGeneratorTest {
         Assert.assertEquals(0, beforeIterateLarger);
         Assert.assertEquals(numberOfSequencesToGenerate, sgenLarger.getTotalSequencesIterated());
     }
-
 }

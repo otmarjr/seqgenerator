@@ -1,3 +1,4 @@
+import com.google.common.collect.Lists;
 import javafx.collections.transformation.SortedList;
 
 import java.io.Serializable;
@@ -66,7 +67,7 @@ public class SequenceGenerator<T> implements Iterator<List<T>> {
 
         if (combinationsGenerator == null){
             combinationsGenerator = new CombinationIterator<>(elements, sequenceLength);
-            elementsToPermute = combinationsGenerator.next();
+            elementsToPermute = Lists.newArrayList(combinationsGenerator.next());
         }
 
         if (permutationGenerator == null){
@@ -79,7 +80,7 @@ public class SequenceGenerator<T> implements Iterator<List<T>> {
                 sequenceLength++;
                 combinationsGenerator = new CombinationIterator<T>(elements, sequenceLength);
             }
-            elementsToPermute = combinationsGenerator.next();
+            elementsToPermute = Lists.newArrayList(combinationsGenerator.next());
             permutationGenerator = new PermutationIterator<>(elementsToPermute);
         }
 

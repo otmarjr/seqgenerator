@@ -5,7 +5,7 @@ import java.util.*;
 
 public class CombinationIterator<T>
         implements
-        Iterator<List<T>> {
+        Iterator<Set<T>> {
     private List<T> items;
     private int choose;
     private boolean finished;
@@ -38,14 +38,13 @@ public class CombinationIterator<T>
             }
 
             for (int i=0;i<choose;i++){
-                if (currentCombinationIndices[i] < 0 || currentCombinationIndices[i] >= choose){
+                if (currentCombinationIndices[i] < 0 || currentCombinationIndices[i] >= this.items.size()){
                     throw new IllegalArgumentException("Current combination have an illegal value at position " + i + ".");
                 }
             }
             this.current = currentCombinationIndices;
         }
     }
-
 
     public int[] getCurrentIndices(){
         return Arrays.copyOf(current, current.length);
@@ -55,11 +54,12 @@ public class CombinationIterator<T>
         return !finished;
     }
 
-    public List<T> next() {
+    public Set<T> next() {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
-        List<T> result = new ArrayList<T>(choose);
+        Set<T> result = new HashSet<T>(choose);
+
         for (int i = 0; i < choose; i++) {
             result.add(items.get(current[i]));
         }
