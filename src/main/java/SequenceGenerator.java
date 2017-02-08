@@ -22,6 +22,14 @@ public class SequenceGenerator<T> implements Iterator<List<T>> {
     }
 
     public SequenceGenerator(Collection<T> elements, int maximumSequenceLength){
+        this(elements, maximumSequenceLength, null);
+    }
+
+    public SequenceGenerator(Collection<T> elements, SequenceIndex currentIndex){
+        this(elements, elements == null ? 0 : elements.size(), currentIndex);
+    }
+
+    public SequenceGenerator(Collection<T> elements, int maximumSequenceLength, SequenceIndex currentIndex){
 
         if (elements == null){
             throw new IllegalArgumentException("Elements set must be not null.");
@@ -35,6 +43,12 @@ public class SequenceGenerator<T> implements Iterator<List<T>> {
         this.sequenceLength = 1;
         this.maximumLength = maximumSequenceLength;
         this.elements = elements;
+
+        if (currentIndex != null){
+            this.setCurrentIndex(currentIndex);
+            // Assuming that the element produced by current index has already been stored, skip it:
+            this.next();
+        }
     }
 
     @Override
@@ -133,7 +147,7 @@ public class SequenceGenerator<T> implements Iterator<List<T>> {
         return new SequenceIndex(this.sequenceLength, this.combinationsGenerator.getCurrentIndices(), this.permutationGenerator.getCurrentIndices());
     }
 
-    public void setCurrentIndex(SequenceIndex index){
+    private void setCurrentIndex(SequenceIndex index){
         if (index == null || index.getCurrentCombinationIndices() == null || index.getCurrentPermutationIndices() == null){
             throw new IllegalArgumentException("Index and its members cannot be null.");
         }
